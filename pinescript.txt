@@ -1,0 +1,26 @@
+//@version=4
+strategy("Moving Average Colored EMA/SMA", shorttitle="Colored EMA /SMA", overlay=true)
+
+len = input(30, minval=1, title="ema Length")
+src = close
+emaVal = ema(src, len)
+
+len2 = input(10, minval=1, title="sma Length")
+src2 = close
+smaVal = sma(src2, len2)
+
+if crossover(emaVal, smaVal)
+    strategy.entry("Buy", strategy.long)
+    
+if crossunder(emaVal, smaVal)
+    strategy.entry("Sell", strategy.short)
+    
+up = emaVal > emaVal[1]
+down = emaVal < emaVal[1]
+mycolor = up ? color.green : down ? color.red : color.blue
+plot(emaVal, title="EMA", color=mycolor, linewidth=3)
+
+up2 = smaVal > smaVal[1]
+down2 = smaVal < smaVal[1]
+mycolor2 = up2 ? color.green : down2 ? color.red : color.blue
+plot(smaVal, title="SMA", color=mycolor2, linewidth=1)
